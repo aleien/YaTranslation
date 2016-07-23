@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/fragment_cards_touch_helper"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+	<RelativeLayout
+		android:id="@+id/fragment_cards_card_rotating_frame_layout"
+		android:layout_width="328dp"
+		android:layout_height="328dp"
+		android:layout_centerHorizontal="true"
+		android:layout_centerVertical="true"
+		android:gravity="center">
+
+		<ImageView
+			android:id="@+id/fragment_cards_card_background_image_view"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_gravity="center"
+			android:background="#33000000"/>
+
+		<TextView
+			android:id="@+id/fragment_cards_card_progress_text_view"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"/>
+
+		<TextView
+			android:id="@+id/fragment_cards_card_word_text_view"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+
+		<ImageView
+			android:id="@+id/fragment_cards_true_image_view"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentTop="true"
+			android:alpha="0"
+			android:src="@drawable/ic_true"/>
+
+		<ImageView
+			android:id="@+id/fragment_cards_false_image_view"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentTop="true"
+			android:alpha="0"
+			android:src="@drawable/ic_false"/>
+
+	</RelativeLayout>
+
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:gravity="center"
+		android:text="Тут должна быть красивая подсказка"/>
+
+</RelativeLayout>

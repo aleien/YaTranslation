@@ -58,12 +58,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeLibraries() {
-        JsonWTF jsonWTF = new JsonWTF();
-        InitJsonWordList initJsonWordList = jsonWTF.getLocalJson(getApplicationContext());
-        List<String> hehe = initJsonWordList.getEnList();
-
-        SlovoModel.init(this);
-        mDatabase = new SlovoModel();
+        SlovoModel.init(getApplicationContext());
 
         OkHttpClient loggingClient = provideOkHttpClient();
 

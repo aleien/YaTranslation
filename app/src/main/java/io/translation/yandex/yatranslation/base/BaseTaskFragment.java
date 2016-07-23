@@ -18,6 +18,7 @@ public class BaseTaskFragment extends BaseFragment {
     TextView taskName;
     @BindView(R.id.fragment_task_base_container)
     FrameLayout mContainer;
+    View mView;
 
     String mName;
     View taskView;
