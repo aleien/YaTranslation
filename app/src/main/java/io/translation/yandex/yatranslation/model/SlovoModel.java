@@ -53,11 +53,28 @@ public class SlovoModel {
     }
 
     public void knowledgeIncrease(Word word) {
+        Word newWord = new Word(word.getRussian(), word.getEnglish(), word.getLevelOfKnowledge() + 1);
+        mWordSet.remove(word);
+        mWordSet.add(newWord);
 
+        try {
+            saveWords(mWordSet, NAME_OF_WORDS_FILE, sContext);
+        } catch (IOException e) {
+            Log.e(getClass().getName(), "IOException in knowledgeIncrease!", e);
+        }
     }
 
     public void knowledgeDecrease(Word word) {
+        // Эх, сейчас про SQLite вспонмить бы
+        Word newWord = new Word(word.getRussian(), word.getEnglish(), word.getLevelOfKnowledge() - 1);
+        mWordSet.remove(word);
+        mWordSet.add(newWord);
 
+        try {
+            saveWords(mWordSet, NAME_OF_WORDS_FILE, sContext);
+        } catch (IOException e) {
+            Log.e(getClass().getName(), "IOException in knowledgeDecrease!", e);
+        }
     }
 
     private void saveWords(Set<Word> wordSet, String nameOfFile, Context context) throws IOException {

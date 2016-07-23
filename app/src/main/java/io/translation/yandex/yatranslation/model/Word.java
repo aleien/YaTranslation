@@ -14,7 +14,6 @@ public class Word implements Serializable {
         mLevelOfKnowledge = levelOfKnowledge;
     }
 
-
     public String getRussian() {
         return mRussian;
     }
@@ -25,5 +24,9 @@ public class Word implements Serializable {
 
     public boolean isLearned() {
         return (mLevelOfKnowledge >= 10);
+    }
+
+    public int getLevelOfKnowledge() {
+        return mLevelOfKnowledge;
     }
 }
