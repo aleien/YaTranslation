@@ -1,6 +1,7 @@
 package io.translation.yandex.yatranslation.views;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.translation.yandex.yatranslation.R;
 import io.translation.yandex.yatranslation.model.Word;
 
@@ -25,12 +27,13 @@ import io.translation.yandex.yatranslation.model.Word;
 
 public class WordsAdapter extends RecyclerView.Adapter {
     List<Word> words = new ArrayList<>();
-    Context context;
-    Boolean translation;
+    List<String> text = new ArrayList<>();
+    List<String> translation = new ArrayList<>();
 
-    public WordsAdapter(Context context, Set<Word> words, boolean translation) {
+    Context context;
+
+    public WordsAdapter(Context context, Set<Word> words) {
         this.context = context.getApplicationContext();
-        this.translation = translation;
         setWordsList(words);
     }
 
@@ -41,6 +44,11 @@ public class WordsAdapter extends RecyclerView.Adapter {
         this.words.clear();
         this.words.addAll(words);
         Collections.shuffle(this.words, new Random(seed));
+
+        for (Word word : this.words) {
+            text.add(word.getRussian());
+            translation.add(word.getEnglish());
+        }
     }
 
     @Override
@@ -52,10 +60,10 @@ public class WordsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         WordViewHolder wordHolder = (WordViewHolder) holder;
-        if (translation) {
-            wordHolder.setWord(this.words.get(position).getEnglish());
+        if (position % 2 == 0) {
+            wordHolder.setWord(text.get(position));
         } else {
-            wordHolder.setWord(this.words.get(position).getRussian());
+            wordHolder.setWord(translation.get(position));
         }
     }
 
@@ -75,6 +83,11 @@ public class WordsAdapter extends RecyclerView.Adapter {
 
         public void setWord(String word) {
             button.setText(word);
+        }
+
+        @OnClick(R.id.fragment_main_task_item_button)
+        public void setButtonSelectable() {
+            button.setSelected(!button.isSelected());
         }
 
 

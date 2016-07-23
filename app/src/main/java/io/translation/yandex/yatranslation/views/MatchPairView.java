@@ -2,6 +2,7 @@ package io.translation.yandex.yatranslation.views;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -39,26 +40,18 @@ public class MatchPairView extends LinearLayout {
 
     private void init() {
         setOrientation(HORIZONTAL);
+
         LinearLayout.LayoutParams linearLayoutParams
-                = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        linearLayoutParams.weight = 1;
+                = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         wordsRecycler = new RecyclerView(getContext());
         wordsRecycler.setLayoutParams(linearLayoutParams);
 
-        translationsRecycler = new RecyclerView(getContext());
-        translationsRecycler.setLayoutParams(linearLayoutParams);
+        wordsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
-        wordsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        translationsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        WordsAdapter wordsAdapter = new WordsAdapter(getContext(), words, true);
-        WordsAdapter translateAdapter = new WordsAdapter(getContext(), words, false);
-
+        WordsAdapter wordsAdapter = new WordsAdapter(getContext(), words);
         wordsRecycler.setAdapter(wordsAdapter);
-        translationsRecycler.setAdapter(translateAdapter);
         
         addView(wordsRecycler);
-        addView(translationsRecycler);
 
 
 
