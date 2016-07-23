@@ -1,16 +1,27 @@
 package io.translation.yandex.yatranslation;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import io.translation.yandex.yatranslation.api.TranslateApi;
 import io.translation.yandex.yatranslation.model.SlovoModel;
+import io.translation.yandex.yatranslation.model.TranslationResponse;
+import io.translation.yandex.yatranslation.model.Word;
+import io.translation.yandex.yatranslation.model.json.InitJsonWordList;
+import io.translation.yandex.yatranslation.model.json.JsonWTF;
 import io.translation.yandex.yatranslation.screens.MainFragment;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -59,16 +70,48 @@ public class MainActivity extends AppCompatActivity {
 
         SlovoModel.init(getApplicationContext());
 
-        OkHttpClient loggingClient = provideOkHttpClient();
+        final SlovoModel slovoModel = new SlovoModel();
 
-        mRetrofit = new Retrofit.Builder()
-                .baseUrl("https://dictionary.yandex.net/api/v1/dicservice.json/")
-                .client(loggingClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Set<Word> words = slovoModel.getWords();
+        if (words == null || words.size() == 0) {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void[] params) {
+                    OkHttpClient loggingClient = provideOkHttpClient();
 
-        mTranslateApi = mRetrofit.create(TranslateApi.class);
+                    mRetrofit = new Retrofit.Builder()
+                            .baseUrl("https://dictionary.yandex.net/api/v1/dicservice.json/")
+                            .client(loggingClient)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
 
+                    mTranslateApi = mRetrofit.create(TranslateApi.class);
+
+                    JsonWTF jsonWTF = new JsonWTF();
+                    InitJsonWordList initJsonWordList = jsonWTF.getLocalJson(getApplicationContext());
+                    List<String> hehe = initJsonWordList.getRuList();
+
+                    for (String word : hehe) {
+                        try {
+                            Response<TranslationResponse> response = mTranslateApi.lookup(getResources().getString(R.string.ya_translation_api_key), "ru-en", word).execute();
+                            if (response.isSuccessful()) {
+                                if (response.body().definition.size() != 0 && response.body().definition.get(0).translations.size() != 0) {
+                                    String wordString = response.body().definition.get(0).word;
+                                    String translate = response.body().definition.get(0).translations.get(0).word;
+                                    Word wordWord = new Word(wordString, translate, 0);
+                                    slovoModel.addWord(wordWord);
+                                }
+                            } else {
+                                Log.e("Response", "FUU");
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return null;
+                }
+            }.execute();
+        }
     }
 
     public SlovoModel provideDatabase() {

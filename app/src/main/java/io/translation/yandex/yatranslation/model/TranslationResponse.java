@@ -9,11 +9,10 @@ import java.util.List;
  */
 
 public class TranslationResponse {
-    @SerializedName("head")
-    Object head;
-
     @SerializedName("def")
     public List<Definition> definition;
+    @SerializedName("head")
+    Object head;
 
     public static class Definition {
         @SerializedName("text")
@@ -26,7 +25,7 @@ public class TranslationResponse {
         public List<Translation> translations;
     }
 
-    private static class Translation {
+    public static class Translation {
         @SerializedName("text")
         public String word;
 

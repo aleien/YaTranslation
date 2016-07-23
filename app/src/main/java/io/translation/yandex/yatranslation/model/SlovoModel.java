@@ -25,7 +25,7 @@ public class SlovoModel {
 
     public Set<Word> getWords() {
         if (mWordSet == null) {
-            loadWords(NAME_OF_WORDS_FILE, sContext);
+            mWordSet = loadWords(NAME_OF_WORDS_FILE, sContext);
         }
         return mWordSet;
     }
@@ -43,8 +43,25 @@ public class SlovoModel {
         return learnedWords;
     }
 
+    public void deleteItAll() {
+        mWordSet = new HashSet<>();
+        try {
+            saveWords(mWordSet, NAME_OF_WORDS_FILE, sContext);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addWord(Word word) {
-        mWordSet.add(word);
+        if (mWordSet == null) {
+            mWordSet = loadWords(NAME_OF_WORDS_FILE, sContext);
+        }
+        if (mWordSet == null) {
+            mWordSet = new HashSet<>();
+        }
+        if (!mWordSet.contains(word)) {
+            mWordSet.add(word);
+        }
         try {
             saveWords(mWordSet, NAME_OF_WORDS_FILE, sContext);
         } catch (IOException e) {
@@ -66,18 +83,21 @@ public class SlovoModel {
 
     public void knowledgeDecrease(Word word) {
         // Эх, сейчас про SQLite вспонмить бы
-        Word newWord = new Word(word.getRussian(), word.getEnglish(), word.getLevelOfKnowledge() - 1);
-        mWordSet.remove(word);
-        mWordSet.add(newWord);
+        int level = word.getLevelOfKnowledge();
+        if (level > 0) {
+            Word newWord = new Word(word.getRussian(), word.getEnglish(), level - 1);
+            mWordSet.remove(word);
+            mWordSet.add(newWord);
 
-        try {
-            saveWords(mWordSet, NAME_OF_WORDS_FILE, sContext);
-        } catch (IOException e) {
-            Log.e(getClass().getName(), "IOException in knowledgeDecrease!", e);
+            try {
+                saveWords(mWordSet, NAME_OF_WORDS_FILE, sContext);
+            } catch (IOException e) {
+                Log.e(getClass().getName(), "IOException in knowledgeDecrease!", e);
+            }
         }
     }
 
-    private void saveWords(Set<Word> wordSet, String nameOfFile, Context context) throws IOException {
+    private synchronized void saveWords(Set<Word> wordSet, String nameOfFile, Context context) throws IOException {
         FileOutputStream fos = null;
         ObjectOutputStream oos = null;
         try {

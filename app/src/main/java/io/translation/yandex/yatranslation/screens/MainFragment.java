@@ -17,7 +17,6 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.translation.yandex.yatranslation.MainActivity;
 import io.translation.yandex.yatranslation.R;
 import io.translation.yandex.yatranslation.base.BaseFragment;
 import io.translation.yandex.yatranslation.base.BaseTaskFragment;
@@ -65,6 +64,9 @@ public class MainFragment extends BaseFragment {
         BaseTaskFragment taskFragment = new BaseTaskFragment();
         taskFragment.setName(testTasks.get(taskId));
         switch (taskId) {
+            case 0:
+                taskFragment.setTask(new CardsTaskView(getContext()));
+                break;
             case 1:
                 taskFragment.setTask(new MatchPairView(getContext(),
                         dummyWords));
