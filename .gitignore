@@ -26,6 +26,12 @@ local.properties
 # Idea IDE files
 *.idea/
 *.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
 
 *.DS_STORE
 

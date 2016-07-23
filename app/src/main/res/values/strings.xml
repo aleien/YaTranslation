@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">YaTranslation</string>
+    <string name="ya_translation_api_key">dict.1.1.20160723T092053Z.598b6c98a311f3ed.06e64cb54b918ce8680b0ac705e26acc384edd93</string>
 </resources>
