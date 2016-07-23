@@ -15,6 +15,7 @@ public class BaseTaskFragment extends BaseFragment {
 
     @BindView(R.id.fragment_task_base_container)
     FrameLayout mContainer;
+    View mView;
 
     @Nullable
     @Override
@@ -22,7 +23,17 @@ public class BaseTaskFragment extends BaseFragment {
         return inflater.inflate(R.layout.base_task_fragment, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (mContainer != null) {
+            mContainer.removeAllViews();
+            mContainer.addView(mView);
+        }
+    }
+
     public void setTask(View view) {
+        mView = view;
         if (mContainer != null) {
             mContainer.removeAllViews();
             mContainer.addView(view);

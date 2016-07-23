@@ -56,9 +56,11 @@ public class MainFragment extends BaseFragment {
             mItemButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    BaseTaskFragment baseTaskFragment = new BaseTaskFragment();
+                    baseTaskFragment.setTask(new CardsTaskView(getContext()));
                     getFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.main_fragment_container, new BaseTaskFragment()) // TODO: Быть осторожным
+                            .replace(R.id.main_fragment_container, baseTaskFragment) // TODO: Быть осторожным
                             .commit();
                 }
             });

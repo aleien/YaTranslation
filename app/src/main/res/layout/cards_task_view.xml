@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/fragment_cards_touch_helper"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="vertical">
+
+	<FrameLayout
+		android:id="@+id/fragment_cards_card_rotating_frame_layout"
+		android:layout_width="328dp"
+		android:layout_height="328dp">
+
+		<ImageView
+			android:id="@+id/fragment_cards_card_background_image_view"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_gravity="center"
+			android:background="#998800"/>
+	</FrameLayout>
+
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:text="Тут должна быть красивая подсказка"/>
+
+</LinearLayout>
