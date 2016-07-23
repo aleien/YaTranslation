@@ -1,38 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-	<android.support.v7.widget.Toolbar
-		android:id="@+id/fragment_task_base_toolbar"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:background="?attr/colorPrimary"
-		android:minHeight="?attr/actionBarSize">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/fragment_task_base_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize">
 
-		<ImageView
-			android:id="@+id/fragment_task_toolbar_close_image_view"
-			android:layout_width="14dp"
-			android:layout_height="14dp"
-			android:src="@drawable/ic_close_black_14dp"/>
+        <ImageView
+            android:id="@+id/fragment_task_toolbar_close_image_view"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:src="@drawable/ic_close_black_14dp" />
 
-		<android.support.v7.widget.AppCompatSeekBar
-			android:id="@+id/fragment_task_main_toolbar_seekbar"
-			android:layout_width="250dp"
-			android:layout_height="wrap_content"/>
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/fragment_task_main_toolbar_seekbar"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content" />
 
-		<ImageView
-			android:id="@+id/fragment_task_toolbar_next_image_view"
-			android:layout_width="14dp"
-			android:layout_height="14dp"
-			android:src="@drawable/ic_next_black_14dp"/>
+        <ImageView
+            android:id="@+id/fragment_task_toolbar_next_image_view"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:src="@drawable/ic_next_black_14dp" />
 
-	</android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.Toolbar>
 
-	<FrameLayout
-		android:id="@+id/fragment_task_base_container"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"/>
+    <TextView
+        android:id="@+id/fragment_task_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:textAllCaps="true" />
+
+    <FrameLayout
+        android:id="@+id/fragment_task_base_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

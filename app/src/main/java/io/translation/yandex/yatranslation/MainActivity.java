@@ -35,10 +35,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        JsonWTF jsonWTF = new JsonWTF();
-        InitJsonWordList initJsonWordList = jsonWTF.getLocalJson(getApplicationContext());
-        List<String> hehe = initJsonWordList.getEnList();
-
         initializeLibraries();
 
         setContentView(R.layout.activity_main);
@@ -58,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeLibraries() {
+        JsonWTF jsonWTF = new JsonWTF();
+        InitJsonWordList initJsonWordList = jsonWTF.getLocalJson(getApplicationContext());
+        List<String> hehe = initJsonWordList.getEnList();
+
         OkHttpClient loggingClient = provideOkHttpClient();
 
         mRetrofit = new Retrofit.Builder()
@@ -68,32 +68,19 @@ public class MainActivity extends AppCompatActivity {
 
         mTranslateApi = mRetrofit.create(TranslateApi.class);
 
-//        mTranslateApi.getLangs(getResources().getString(R.string.ya_translation_api_key))
-//        .enqueue(new Callback<List<String>>() {
+
+//        mTranslateApi.lookup(getResources().getString(R.string.ya_translation_api_key), "ru-en", "кошка").enqueue(new Callback<TranslationResponse>() {
 //            @Override
-//            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+//            public void onResponse(Call<TranslationResponse> call, Response<TranslationResponse> response) {
+//                Log.d("Response", response.body().definition.get(0).word);
 //                Toast.makeText(MainActivity.this, "Got response!", Toast.LENGTH_LONG).show();
 //            }
 //
 //            @Override
-//            public void onFailure(Call<List<String>> call, Throwable t) {
+//            public void onFailure(Call<TranslationResponse> call, Throwable t) {
 //                Log.d("Retrofit error", t.getMessage());
 //                Toast.makeText(MainActivity.this, "Error!", Toast.LENGTH_LONG).show();
 //            }
 //        });
-
-        mTranslateApi.lookup(getResources().getString(R.string.ya_translation_api_key), "ru-en", "кошка").enqueue(new Callback<TranslationResponse>() {
-            @Override
-            public void onResponse(Call<TranslationResponse> call, Response<TranslationResponse> response) {
-                Log.d("Response", response.body().definition.get(0).word);
-                Toast.makeText(MainActivity.this, "Got response!", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(Call<TranslationResponse> call, Throwable t) {
-                Log.d("Retrofit error", t.getMessage());
-                Toast.makeText(MainActivity.this, "Error!", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }

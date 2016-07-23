@@ -16,6 +16,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.translation.yandex.yatranslation.R;
+import io.translation.yandex.yatranslation.base.BaseFragment;
+import io.translation.yandex.yatranslation.base.BaseTaskFragment;
+import io.translation.yandex.yatranslation.views.MatchPairView;
 
 
 public class MainFragment extends BaseFragment {
@@ -40,6 +43,7 @@ public class MainFragment extends BaseFragment {
 
         List<String> testTasks = new ArrayList<>();
         testTasks.add("Базовый");
+        testTasks.add("Поиск пары");
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(new TaskAdapter(testTasks));
@@ -56,9 +60,13 @@ public class MainFragment extends BaseFragment {
             mItemButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    BaseTaskFragment taskFragment = new BaseTaskFragment();
+                    taskFragment.setTaskName(mItemButton.getText().toString());
+                    taskFragment.setTask(new MatchPairView(getContext()));
                     getFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.main_fragment_container, new BaseTaskFragment()) // TODO: Быть осторожным
+                            // TODO: Вынести в отдельный класс и сделать статиком
+                            .replace(R.id.main_fragment_container, taskFragment) // TODO: Быть осторожным
                             .commit();
                 }
             });
