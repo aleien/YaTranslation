@@ -1,4 +1,4 @@
-package io.translation.yandex.yatranslation.screens;
+package io.translation.yandex.yatranslation.views;
 
 
 import android.animation.AnimatorSet;
@@ -23,18 +23,19 @@ import io.translation.yandex.yatranslation.model.Word;
 
 public class CardsTaskView extends LinearLayout {
 
-    @BindView(R.id.fragment_cards_card_rotating_frame_layout) // Size does matter
-            RelativeLayout mRotatingLayout;
+    @BindView(R.id.fragment_cards_card_rotating_frame_layout)
+    RelativeLayout mRotatingLayout;
     @BindView(R.id.fragment_cards_true_image_view)
     ImageView mTrueImageView;
     @BindView(R.id.fragment_cards_false_image_view)
     ImageView mFalseImageView;
-    @BindView(R.id.fragment_cards_card_word_text_view)
+    @BindView(R.id.view_cards_card_word_text_view)
     TextView mWordTextView;
     @BindView(R.id.fragment_cards_card_help_text_view)
     TextView mHelpTextView;
     @BindView(R.id.fragment_cards_card_progress_text_view)
     TextView mProgressTextView;
+
     private SlovoModel mSlovoModel;
     private int mPosition;
     private ArrayList<Word> mWordArrayList;
@@ -42,7 +43,6 @@ public class CardsTaskView extends LinearLayout {
 
     public CardsTaskView(Context context) {
         super(context);
-        mSlovoModel = new SlovoModel();
         init();
     }
 
@@ -51,20 +51,17 @@ public class CardsTaskView extends LinearLayout {
         ButterKnife.bind(this);
 
         // Наша постоянная рубрика "Я у мамы говнокодер"
+        mSlovoModel = new SlovoModel();
         Set<Word> wordSet = mSlovoModel.getWords();
         mWordArrayList = new ArrayList<>();
         mPosition = 0;
 
         for (Word word : wordSet) {
             mWordArrayList.add(word);
-            Collections.shuffle(mWordArrayList);
+            Collections.shuffle(mWordArrayList); // Каждый раз новое
         }
 
-        // Вынести в отдельный метод
-        mWord = mWordArrayList.get(mPosition++);
-        mWordTextView.setText(mWord.getEnglish());
-        mProgressTextView.setText(String.valueOf(mWord.getLevelOfKnowledge()));
-        mHelpTextView.setText(mWord.getRussian());
+        nextWord();
 
         mWordTextView.setOnClickListener(new OnClickListener() {
             @Override
@@ -85,6 +82,8 @@ public class CardsTaskView extends LinearLayout {
             }
         });
 
+        // Тут надо сделать красивую анимацию возврата после принятия/отвергания карточки
+        // И вообще
         this.setOnTouchListener(new OnTouchListener() {
             boolean isAnimated, isNextWord;
             float x, x0 = 0;
@@ -100,6 +99,7 @@ public class CardsTaskView extends LinearLayout {
                         if (!isAnimated) {
                             x = event.getX();
                             float delta = x - x0;
+
                             mRotatingLayout.setRotation((delta) / 20);
                             mRotatingLayout.setTranslationX(delta);
                             mTrueImageView.setAlpha(delta / 80);
@@ -110,25 +110,19 @@ public class CardsTaskView extends LinearLayout {
                                     isNextWord = true;
 
                                     mSlovoModel.knowledgeDecrease(mWord);
-                                    mWord = mWordArrayList.get(mPosition++);
                                     mHelpTextView.setVisibility(INVISIBLE);
-                                    mWordTextView.setText(mWord.getEnglish());
-                                    mProgressTextView.setText(String.valueOf(mWord.getLevelOfKnowledge()));
-                                    mHelpTextView.setText(mWord.getRussian());
+                                    nextWord();
                                 }
                             }
 
-                            if (delta > 200) {
-                                if (!isNextWord) { // TODO: Опасно!
+                            if (delta > 200) { // TRUE (свайп вправо)
+                                if (!isNextWord) {
                                     isNextWord = true;
 
                                     mHelpTextView.setVisibility(INVISIBLE);
                                     mSlovoModel.knowledgeIncrease(mWord);
-                                    mWord = mWordArrayList.get(mPosition++);
                                     mHelpTextView.setVisibility(INVISIBLE);
-                                    mWordTextView.setText(mWord.getEnglish());
-                                    mProgressTextView.setText(String.valueOf(mWord.getLevelOfKnowledge()));
-                                    mHelpTextView.setText(mWord.getRussian());
+                                    nextWord();
                                 }
                             }
                         }
@@ -166,5 +160,12 @@ public class CardsTaskView extends LinearLayout {
                 return true;
             }
         });
+    }
+
+    private void nextWord() {
+        mWord = mWordArrayList.get(mPosition++);
+        mWordTextView.setText(mWord.getEnglish());
+        mProgressTextView.setText(String.valueOf(mWord.getLevelOfKnowledge()));
+        mHelpTextView.setText(mWord.getRussian());
     }
 }

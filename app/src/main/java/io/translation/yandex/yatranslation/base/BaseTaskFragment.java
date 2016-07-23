@@ -12,17 +12,16 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.translation.yandex.yatranslation.R;
 
-
+// Получает на вход вьюху, что запихивает в свой контейнер
 public class BaseTaskFragment extends BaseFragment {
 
     @BindView(R.id.fragment_task_name)
     TextView taskName;
     @BindView(R.id.fragment_task_base_container)
     FrameLayout mContainer;
-    View mView;
 
-    String mName;
-    View taskView;
+    String mTaskName;
+    View mTaskView;
 
     @Nullable
     @Override
@@ -33,8 +32,8 @@ public class BaseTaskFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        taskName.setText(mName);
-        mContainer.addView(taskView);
+        taskName.setText(mTaskName);
+        mContainer.addView(mTaskView);
 
     }
 
@@ -43,11 +42,9 @@ public class BaseTaskFragment extends BaseFragment {
         getFragmentManager().popBackStack();
     }
 
-    public void setName(String mName) {
-        this.mName = mName;
-    }
-
-    public void setTask(View view) {
-        taskView = view;
+    // Не getInstance(...), но пойдёт
+    public void setTask(String taskName, View taskView) {
+        mTaskName = taskName;
+        mTaskView = taskView;
     }
 }

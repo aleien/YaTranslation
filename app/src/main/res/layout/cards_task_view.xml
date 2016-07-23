@@ -29,7 +29,7 @@
 			android:textSize="24sp"/>
 
 		<TextView
-			android:id="@+id/fragment_cards_card_word_text_view"
+			android:id="@+id/view_cards_card_word_text_view"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerInParent="true"
@@ -39,7 +39,7 @@
 			android:id="@+id/fragment_cards_card_help_text_view"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_below="@id/fragment_cards_card_word_text_view"
+			android:layout_below="@id/view_cards_card_word_text_view"
 			android:layout_centerHorizontal="true"
 			android:textSize="48sp"
 			android:visibility="invisible"/>

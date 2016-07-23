@@ -8,7 +8,7 @@ import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-
+// Нужен лишь для ButterKnife
 public class BaseFragment extends Fragment {
     private Unbinder unbinder;
 

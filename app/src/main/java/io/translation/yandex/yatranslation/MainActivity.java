@@ -3,6 +3,7 @@ package io.translation.yandex.yatranslation;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
         initializeLibraries();
 
+        checkDatabase();
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -53,28 +56,29 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    OkHttpClient provideOkHttpClient() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(logging);
-        return httpClient.build();
-    }
-
-    private void initializeLibraries() {
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("font/Yandex Sans Display-Regular.ttf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
-
-        SlovoModel.init(getApplicationContext());
-
+    // Нет, мне не стдыно
+    private void checkDatabase() {
         final SlovoModel slovoModel = new SlovoModel();
 
         Set<Word> words = slovoModel.getWords();
         if (words == null || words.size() == 0) {
             new AsyncTask<Void, Void, Void>() {
+                AlertDialog mAlertDialog;
+                int mProgress;
+
+                @Override
+                protected void onPreExecute() {
+                    mAlertDialog = new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Работа")
+                            .setMessage("Подождите: " + mProgress + "/100").create();
+                    mAlertDialog.show();
+                }
+
+                @Override
+                protected void onProgressUpdate(Void... values) {
+                    mAlertDialog.setMessage("Подождите: " + ++mProgress + "/100"); // HARDCORE
+                }
+
                 @Override
                 protected Void doInBackground(Void[] params) {
                     OkHttpClient loggingClient = provideOkHttpClient();
@@ -93,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
                     for (String word : hehe) {
                         try {
+                            publishProgress();
                             Response<TranslationResponse> response = mTranslateApi.lookup(getResources().getString(R.string.ya_translation_api_key), "ru-en", word).execute();
                             if (response.isSuccessful()) {
                                 if (response.body().definition.size() != 0 && response.body().definition.get(0).translations.size() != 0) {
@@ -110,8 +115,31 @@ public class MainActivity extends AppCompatActivity {
                     }
                     return null;
                 }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                    mAlertDialog.hide();
+                }
             }.execute();
         }
+    }
+
+    OkHttpClient provideOkHttpClient() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(logging);
+        return httpClient.build();
+    }
+
+    private void initializeLibraries() {
+        SlovoModel.init(getApplicationContext());
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("font/Yandex Sans Display-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
     }
 
     public SlovoModel provideDatabase() {

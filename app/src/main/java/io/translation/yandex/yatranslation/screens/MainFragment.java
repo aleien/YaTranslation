@@ -9,20 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.translation.yandex.yatranslation.MainActivity;
 import io.translation.yandex.yatranslation.R;
 import io.translation.yandex.yatranslation.base.BaseFragment;
 import io.translation.yandex.yatranslation.base.BaseTaskFragment;
 import io.translation.yandex.yatranslation.model.SlovoModel;
-import io.translation.yandex.yatranslation.model.Word;
+import io.translation.yandex.yatranslation.views.CardsTaskView;
 import io.translation.yandex.yatranslation.views.MatchPairView;
 
 
@@ -35,7 +33,6 @@ public class MainFragment extends BaseFragment {
     Toolbar mToolbar;
 
     private List<String> testTasks;
-    private Set<Word> dummyWords = new HashSet<>();
 
     @Nullable
     @Override
@@ -50,13 +47,10 @@ public class MainFragment extends BaseFragment {
         mToolbar.setTitle(R.string.fragment_main_toolbar_title);
 
         testTasks = new ArrayList<>();
-        testTasks.add("Базовый");
+        testTasks.add("Карточки");
         testTasks.add("Поиск пары");
+        testTasks.add("Остальные задания\nна реконструкции");
 
-        dummyWords.add(Word.getDummyWord());
-        dummyWords.add(new Word("ТЕСТ", "TEST", 0));
-        dummyWords.add(new Word("КОТ", "CAT", 0));
-        dummyWords.add(new Word("СОБАКА", "DOG", 0));
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(new TaskAdapter(testTasks));
@@ -64,14 +58,18 @@ public class MainFragment extends BaseFragment {
 
     BaseTaskFragment getSetupTaskFragment(int taskId) {
         BaseTaskFragment taskFragment = new BaseTaskFragment();
-        taskFragment.setName(testTasks.get(taskId));
         switch (taskId) {
             case 0:
-                taskFragment.setTask(new CardsTaskView(getContext()));
+                taskFragment.setTask(testTasks.get(taskId), new CardsTaskView(getContext()));
                 break;
             case 1:
-                taskFragment.setTask(new MatchPairView(getContext(),
+                taskFragment.setTask(testTasks.get(taskId), new MatchPairView(getContext(),
                         new SlovoModel().getWords()));
+                break;
+            case 2:
+                TextView textView = new TextView(getContext());
+                textView.setText("Ну правда на реконструкции");
+                taskFragment.setTask(testTasks.get(taskId), textView);
                 break;
         }
         return taskFragment;
@@ -92,7 +90,7 @@ public class MainFragment extends BaseFragment {
                     getFragmentManager()
                             .beginTransaction()
                             // TODO: Вынести в отдельный класс и сделать статиком
-                            .replace(R.id.main_fragment_container, taskFragment) // TODO: Быть осторожным
+                            .replace(R.id.main_fragment_container, taskFragment)
                             .addToBackStack(String.valueOf(getAdapterPosition()))
                             .commit();
                 }
