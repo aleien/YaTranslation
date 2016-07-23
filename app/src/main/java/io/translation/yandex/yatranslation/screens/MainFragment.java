@@ -88,6 +88,7 @@ public class MainFragment extends BaseFragment {
                             .beginTransaction()
                             // TODO: Вынести в отдельный класс и сделать статиком
                             .replace(R.id.main_fragment_container, taskFragment) // TODO: Быть осторожным
+                            .addToBackStack(String.valueOf(getAdapterPosition()))
                             .commit();
                 }
             });

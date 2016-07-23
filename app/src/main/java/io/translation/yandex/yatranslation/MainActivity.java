@@ -1,27 +1,20 @@
 package io.translation.yandex.yatranslation;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.Toast;
-
-import java.util.List;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import io.translation.yandex.yatranslation.api.TranslateApi;
 import io.translation.yandex.yatranslation.model.SlovoModel;
-import io.translation.yandex.yatranslation.model.TranslationResponse;
-import io.translation.yandex.yatranslation.model.json.InitJsonWordList;
-import io.translation.yandex.yatranslation.model.json.JsonWTF;
 import io.translation.yandex.yatranslation.screens.MainFragment;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
     public static int TASK_WORDS_COUNT = 10;
@@ -58,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeLibraries() {
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("font/Yandex Sans Display-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
         SlovoModel.init(getApplicationContext());
 
         OkHttpClient loggingClient = provideOkHttpClient();
@@ -70,23 +69,14 @@ public class MainActivity extends AppCompatActivity {
 
         mTranslateApi = mRetrofit.create(TranslateApi.class);
 
-
-//        mTranslateApi.lookup(getResources().getString(R.string.ya_translation_api_key), "ru-en", "кошка").enqueue(new Callback<TranslationResponse>() {
-//            @Override
-//            public void onResponse(Call<TranslationResponse> call, Response<TranslationResponse> response) {
-//                Log.d("Response", response.body().definition.get(0).word);
-//                Toast.makeText(MainActivity.this, "Got response!", Toast.LENGTH_LONG).show();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<TranslationResponse> call, Throwable t) {
-//                Log.d("Retrofit error", t.getMessage());
-//                Toast.makeText(MainActivity.this, "Error!", Toast.LENGTH_LONG).show();
-//            }
-//        });
     }
 
     public SlovoModel provideDatabase() {
         return mDatabase;
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

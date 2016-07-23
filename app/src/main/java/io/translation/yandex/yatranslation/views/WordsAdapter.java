@@ -26,10 +26,11 @@ import io.translation.yandex.yatranslation.model.Word;
 public class WordsAdapter extends RecyclerView.Adapter {
     List<Word> words = new ArrayList<>();
     Context context;
+    Boolean translation;
 
-    public WordsAdapter(Context context, Set<Word> words) {
+    public WordsAdapter(Context context, Set<Word> words, boolean translation) {
         this.context = context.getApplicationContext();
-
+        this.translation = translation;
         setWordsList(words);
     }
 
@@ -51,7 +52,11 @@ public class WordsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         WordViewHolder wordHolder = (WordViewHolder) holder;
-        wordHolder.setWord(this.words.get(position));
+        if (translation) {
+            wordHolder.setWord(this.words.get(position).getEnglish());
+        } else {
+            wordHolder.setWord(this.words.get(position).getRussian());
+        }
     }
 
     @Override
@@ -68,8 +73,8 @@ public class WordsAdapter extends RecyclerView.Adapter {
             ButterKnife.bind(this, itemView);
         }
 
-        public void setWord(Word word) {
-            button.setText(word.getEnglish());
+        public void setWord(String word) {
+            button.setText(word);
         }
 
 

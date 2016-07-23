@@ -41,6 +41,7 @@ public class MatchPairView extends LinearLayout {
         setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams linearLayoutParams
                 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        linearLayoutParams.weight = 1;
         wordsRecycler = new RecyclerView(getContext());
         wordsRecycler.setLayoutParams(linearLayoutParams);
 
@@ -50,10 +51,11 @@ public class MatchPairView extends LinearLayout {
         wordsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         translationsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        WordsAdapter wordsAdapter = new WordsAdapter(getContext(), words);
+        WordsAdapter wordsAdapter = new WordsAdapter(getContext(), words, true);
+        WordsAdapter translateAdapter = new WordsAdapter(getContext(), words, false);
 
         wordsRecycler.setAdapter(wordsAdapter);
-        translationsRecycler.setAdapter(wordsAdapter);
+        translationsRecycler.setAdapter(translateAdapter);
         
         addView(wordsRecycler);
         addView(translationsRecycler);

@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import io.translation.yandex.yatranslation.R;
 
 
@@ -35,6 +36,11 @@ public class BaseTaskFragment extends BaseFragment {
         taskName.setText(mName);
         mContainer.addView(taskView);
 
+    }
+
+    @OnClick(R.id.fragment_task_toolbar_close_image_view)
+    public void onCloseClick() {
+        getFragmentManager().popBackStack();
     }
 
     public void setName(String mName) {
