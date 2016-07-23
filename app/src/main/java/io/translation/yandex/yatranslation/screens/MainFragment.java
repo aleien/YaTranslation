@@ -54,8 +54,8 @@ public class MainFragment extends BaseFragment {
 
         dummyWords.add(Word.getDummyWord());
         dummyWords.add(new Word("ТЕСТ", "TEST", 0));
-        dummyWords.add(new Word("ТЕСТ", "TEST", 0));
-        dummyWords.add(new Word("ТЕСТ", "TEST", 0));
+        dummyWords.add(new Word("КОТ", "CAT", 0));
+        dummyWords.add(new Word("СОБАКА", "DOG", 0));
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(new TaskAdapter(testTasks));

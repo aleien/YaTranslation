@@ -30,6 +30,9 @@ public class WordsAdapter extends RecyclerView.Adapter {
     List<String> text = new ArrayList<>();
     List<String> translation = new ArrayList<>();
 
+    public String firstSelectedWord;
+    public String secondSelectedWord;
+
     Context context;
 
     public WordsAdapter(Context context, Set<Word> words) {
@@ -47,6 +50,9 @@ public class WordsAdapter extends RecyclerView.Adapter {
 
         for (Word word : this.words) {
             text.add(word.getRussian());
+        }
+        Collections.shuffle(this.words, new Random(seed));
+        for (Word word : this.words) {
             translation.add(word.getEnglish());
         }
     }
@@ -61,20 +67,23 @@ public class WordsAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         WordViewHolder wordHolder = (WordViewHolder) holder;
         if (position % 2 == 0) {
-            wordHolder.setWord(text.get(position));
+            wordHolder.setWord(text.get(position / 2));
         } else {
-            wordHolder.setWord(translation.get(position));
+            wordHolder.setWord(translation.get((position - 1) / 2));
         }
     }
 
     @Override
     public int getItemCount() {
-        return words.size();
+        return words.size() * 2;
     }
 
-    public static class WordViewHolder extends RecyclerView.ViewHolder {
+    // ФУУУУУУУУУУУУ!!!
+    public class WordViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.fragment_main_task_item_button)
         Button button;
+
+        String word;
 
         public WordViewHolder(View itemView) {
             super(itemView);
@@ -83,11 +92,21 @@ public class WordsAdapter extends RecyclerView.Adapter {
 
         public void setWord(String word) {
             button.setText(word);
+            this.word = word;
         }
 
         @OnClick(R.id.fragment_main_task_item_button)
         public void setButtonSelectable() {
             button.setSelected(!button.isSelected());
+
+//            if (getLayoutPosition() % 2 == 0) {
+//                WordsAdapter.this.firstSelectedWord = word;
+//            } else {
+//                WordsAdapter.this.secondSelectedWord = word;
+//            }
+
+//            if (secondSelectedWord != null
+//                    && words.get(getAdapterPosition()).getEnglish().equals(secondSelectedWord));
         }
 
 
