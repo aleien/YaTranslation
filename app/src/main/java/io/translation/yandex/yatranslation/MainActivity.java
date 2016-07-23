@@ -10,6 +10,7 @@ import java.util.List;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import io.translation.yandex.yatranslation.api.TranslateApi;
+import io.translation.yandex.yatranslation.model.SlovoModel;
 import io.translation.yandex.yatranslation.model.TranslationResponse;
 import io.translation.yandex.yatranslation.model.json.InitJsonWordList;
 import io.translation.yandex.yatranslation.model.json.JsonWTF;
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeLibraries() {
+        SlovoModel.init(getApplicationContext());
+
         OkHttpClient loggingClient = provideOkHttpClient();
 
         mRetrofit = new Retrofit.Builder()

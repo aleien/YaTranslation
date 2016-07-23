@@ -1,11 +1,14 @@
 package io.translation.yandex.yatranslation.screens;
 
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -14,7 +17,13 @@ import io.translation.yandex.yatranslation.R;
 public class CardsTaskView extends LinearLayout {
 
     @BindView(R.id.fragment_cards_card_rotating_frame_layout) // Size does matter
-            FrameLayout mRotatingLayout;
+            RelativeLayout mRotatingLayout;
+
+    @BindView(R.id.fragment_cards_true_image_view)
+    ImageView mTrueImageView;
+
+    @BindView(R.id.fragment_cards_false_image_view)
+    ImageView mFalseImageView;
 
     public CardsTaskView(Context context) {
         super(context);
@@ -40,14 +49,10 @@ public class CardsTaskView extends LinearLayout {
                         if (!isAnimated) {
                             x = event.getX();
                             float delta = x - x0;
-                            mRotatingLayout.setRotation((delta) / 10);
+                            mRotatingLayout.setRotation((delta) / 20);
                             mRotatingLayout.setTranslationX(delta);
-                            //backgroundImageView.setAlpha(-delta / 600);
-                            if (-delta < 200) {
-                                //backgroundImageView.setTranslationX(-delta / 10 - (delta + 200) / 4);
-                            } else {
-                                //backgroundImageView.setTranslationX(-delta / 10 + (delta + 200) / 4);
-                            }
+                            mTrueImageView.setAlpha(delta / 80);
+                            mFalseImageView.setAlpha(-delta / 80);
 
                             if (-delta > 350) {
                                 /*
@@ -63,7 +68,28 @@ public class CardsTaskView extends LinearLayout {
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
                         if (!isAnimated) {
+                            ObjectAnimator rotatingAnimator = ObjectAnimator
+                                    .ofFloat(mRotatingLayout, "rotation", mRotatingLayout.getRotation(), 0.0f)
+                                    .setDuration(500);
 
+                            ObjectAnimator translationAnimator = ObjectAnimator
+                                    .ofFloat(mRotatingLayout, "translationX", mRotatingLayout.getTranslationX(), 0.0f)
+                                    .setDuration(500);
+
+                            ObjectAnimator trueAlphaAnimator = ObjectAnimator
+                                    .ofFloat(mTrueImageView, "alpha", mTrueImageView.getAlpha(), 0.0f)
+                                    .setDuration(500);
+
+                            ObjectAnimator falseAlphaAnimator = ObjectAnimator
+                                    .ofFloat(mFalseImageView, "alpha", mFalseImageView.getAlpha(), 0.0f)
+                                    .setDuration(500);
+
+                            AnimatorSet animatorSet = new AnimatorSet();
+                            animatorSet.play(translationAnimator)
+                                    .with(rotatingAnimator)
+                                    .with(trueAlphaAnimator)
+                                    .with(falseAlphaAnimator);
+                            animatorSet.start();
                         } else {
 
                         }
