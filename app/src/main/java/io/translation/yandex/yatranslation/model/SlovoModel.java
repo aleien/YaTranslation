@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashSet;
 import java.util.Set;
 
 public class SlovoModel {
@@ -29,12 +30,50 @@ public class SlovoModel {
         return mWordSet;
     }
 
+    public Set<Word> getUnlearnedWords(int count) {
+        Set<Word> allWordSet = getWords();
+        Set<Word> learnedWords = new HashSet<>();
+        int i = 0;
+        for (Word word : allWordSet) {
+            if (!word.isLearned() && i < count) {
+                learnedWords.add(word);
+                i++;
+            }
+        }
+        return learnedWords;
+    }
+
     public void addWord(Word word) {
         mWordSet.add(word);
         try {
             saveWords(mWordSet, NAME_OF_WORDS_FILE, sContext);
         } catch (IOException e) {
             Log.e(getClass().getName(), "IOException in addWord!", e);
+        }
+    }
+
+    public void knowledgeIncrease(Word word) {
+        Word newWord = new Word(word.getRussian(), word.getEnglish(), word.getLevelOfKnowledge() + 1);
+        mWordSet.remove(word);
+        mWordSet.add(newWord);
+
+        try {
+            saveWords(mWordSet, NAME_OF_WORDS_FILE, sContext);
+        } catch (IOException e) {
+            Log.e(getClass().getName(), "IOException in knowledgeIncrease!", e);
+        }
+    }
+
+    public void knowledgeDecrease(Word word) {
+        // Эх, сейчас про SQLite вспонмить бы
+        Word newWord = new Word(word.getRussian(), word.getEnglish(), word.getLevelOfKnowledge() - 1);
+        mWordSet.remove(word);
+        mWordSet.add(newWord);
+
+        try {
+            saveWords(mWordSet, NAME_OF_WORDS_FILE, sContext);
+        } catch (IOException e) {
+            Log.e(getClass().getName(), "IOException in knowledgeDecrease!", e);
         }
     }
 

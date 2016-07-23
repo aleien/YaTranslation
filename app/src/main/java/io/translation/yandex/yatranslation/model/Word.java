@@ -6,13 +6,13 @@ import java.io.Serializable;
 public class Word implements Serializable {
     private String mRussian;
     private String mEnglish;
-    private int mCountOfShow;
+    private int mLevelOfKnowledge;
 
-    public Word(String russian, String english) {
+    public Word(String russian, String english, int levelOfKnowledge) {
         mRussian = russian;
         mEnglish = english;
+        mLevelOfKnowledge = levelOfKnowledge;
     }
-
 
     public String getRussian() {
         return mRussian;
@@ -22,11 +22,11 @@ public class Word implements Serializable {
         return mEnglish;
     }
 
-    public int getCountOfShow() {
-        return mCountOfShow;
+    public boolean isLearned() {
+        return (mLevelOfKnowledge >= 10);
     }
 
-    public void setCountOfShow(int countOfShow) {
-        mCountOfShow = countOfShow;
+    public int getLevelOfKnowledge() {
+        return mLevelOfKnowledge;
     }
 }
