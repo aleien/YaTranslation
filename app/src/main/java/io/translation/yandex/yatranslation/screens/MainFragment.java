@@ -17,9 +17,11 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.translation.yandex.yatranslation.MainActivity;
 import io.translation.yandex.yatranslation.R;
 import io.translation.yandex.yatranslation.base.BaseFragment;
 import io.translation.yandex.yatranslation.base.BaseTaskFragment;
+import io.translation.yandex.yatranslation.model.SlovoModel;
 import io.translation.yandex.yatranslation.model.Word;
 import io.translation.yandex.yatranslation.views.MatchPairView;
 
@@ -69,7 +71,7 @@ public class MainFragment extends BaseFragment {
                 break;
             case 1:
                 taskFragment.setTask(new MatchPairView(getContext(),
-                        dummyWords));
+                        new SlovoModel().getWords()));
                 break;
         }
         return taskFragment;
