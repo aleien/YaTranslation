@@ -10,6 +10,7 @@ import java.util.List;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import io.translation.yandex.yatranslation.api.TranslateApi;
+import io.translation.yandex.yatranslation.model.SlovoModel;
 import io.translation.yandex.yatranslation.model.TranslationResponse;
 import io.translation.yandex.yatranslation.model.json.InitJsonWordList;
 import io.translation.yandex.yatranslation.model.json.JsonWTF;
@@ -23,10 +24,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+    public static int TASK_WORDS_COUNT = 10;
 
     // TODO: можно сделать через dagger, если будет желание
     Retrofit mRetrofit;
     TranslateApi mTranslateApi;
+
+    SlovoModel mDatabase;
 
     @BindString(R.string.ya_translation_api_key)
     String apiKey;
@@ -58,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
         InitJsonWordList initJsonWordList = jsonWTF.getLocalJson(getApplicationContext());
         List<String> hehe = initJsonWordList.getEnList();
 
+        SlovoModel.init(this);
+        mDatabase = new SlovoModel();
+
         OkHttpClient loggingClient = provideOkHttpClient();
 
         mRetrofit = new Retrofit.Builder()
@@ -82,5 +89,9 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(MainActivity.this, "Error!", Toast.LENGTH_LONG).show();
 //            }
 //        });
+    }
+
+    public SlovoModel provideDatabase() {
+        return mDatabase;
     }
 }

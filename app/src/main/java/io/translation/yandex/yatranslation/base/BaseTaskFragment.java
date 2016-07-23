@@ -19,20 +19,28 @@ public class BaseTaskFragment extends BaseFragment {
     @BindView(R.id.fragment_task_base_container)
     FrameLayout mContainer;
 
+    String mName;
+    View taskView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.base_task_fragment, container, false);
     }
 
-    public void setTaskName(String taskName) {
-        this.taskName.setText(taskName);
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        taskName.setText(mName);
+        mContainer.addView(taskView);
+
+    }
+
+    public void setName(String mName) {
+        this.mName = mName;
     }
 
     public void setTask(View view) {
-        if (mContainer != null) {
-            mContainer.removeAllViews();
-            mContainer.addView(view);
-        }
+        taskView = view;
     }
 }

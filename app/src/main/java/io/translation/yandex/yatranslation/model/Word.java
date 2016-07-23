@@ -29,4 +29,8 @@ public class Word implements Serializable {
     public int getLevelOfKnowledge() {
         return mLevelOfKnowledge;
     }
+
+    public static Word getDummyWord() {
+        return new Word("СЛОВО", "WORD", 0);
+    }
 }
