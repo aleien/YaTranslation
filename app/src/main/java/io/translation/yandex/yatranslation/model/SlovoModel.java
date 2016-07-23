@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashSet;
 import java.util.Set;
 
 public class SlovoModel {
@@ -29,6 +30,19 @@ public class SlovoModel {
         return mWordSet;
     }
 
+    public Set<Word> getUnlearnedWords(int count) {
+        Set<Word> allWordSet = getWords();
+        Set<Word> learnedWords = new HashSet<>();
+        int i = 0;
+        for (Word word : allWordSet) {
+            if (!word.isLearned() && i < count) {
+                learnedWords.add(word);
+                i++;
+            }
+        }
+        return learnedWords;
+    }
+
     public void addWord(Word word) {
         mWordSet.add(word);
         try {
@@ -36,6 +50,14 @@ public class SlovoModel {
         } catch (IOException e) {
             Log.e(getClass().getName(), "IOException in addWord!", e);
         }
+    }
+
+    public void knowledgeIncrease(Word word) {
+
+    }
+
+    public void knowledgeDecrease(Word word) {
+
     }
 
     private void saveWords(Set<Word> wordSet, String nameOfFile, Context context) throws IOException {
