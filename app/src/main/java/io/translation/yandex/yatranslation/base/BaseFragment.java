@@ -1,4 +1,4 @@
-package io.translation.yandex.yatranslation.screens;
+package io.translation.yandex.yatranslation.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

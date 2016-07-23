@@ -1,5 +1,6 @@
 package io.translation.yandex.yatranslation;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -11,12 +12,18 @@ import io.translation.yandex.yatranslation.screens.MainFragment;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
+    public static int TASK_WORDS_COUNT = 10;
 
     // TODO: можно сделать через dagger, если будет желание
     Retrofit mRetrofit;
     TranslateApi mTranslateApi;
+
+    SlovoModel mDatabase;
 
     @BindString(R.string.ya_translation_api_key)
     String apiKey;
@@ -44,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeLibraries() {
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("font/Yandex Sans Display-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
 
         SlovoModel.init(getApplicationContext());
         SlovoModel slovoModel = new SlovoModel();
@@ -61,19 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         mTranslateApi = mRetrofit.create(TranslateApi.class);
 
-//        mTranslateApi.getLangs(getResources().getString(R.string.ya_translation_api_key))
-//        .enqueue(new Callback<List<String>>() {
-//            @Override
-//            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-//                Toast.makeText(MainActivity.this, "Got response!", Toast.LENGTH_LONG).show();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<String>> call, Throwable t) {
-//                Log.d("Retrofit error", t.getMessage());
-//                Toast.makeText(MainActivity.this, "Error!", Toast.LENGTH_LONG).show();
-//            }
-//        });
+    }
 
         final SlovoModel slovoModel = new SlovoModel();
         slovoModel.deleteItAll();
@@ -107,5 +107,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }.execute();
         */
+    public SlovoModel provideDatabase() {
+        return mDatabase;
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }
